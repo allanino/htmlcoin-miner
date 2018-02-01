@@ -110,7 +110,15 @@ do
   sleep 2
 done
 
-echo -e "\e[1m\e[92mStart up complete! Now we will just watch and hope we'll find some block :)\e[0m"
-echo
+if [ -z ${TELEGRAM_BOT_TOKEN+x} ] || [ -z ${TELEGRAM_CHAT_ID+x} ]
+then
+  echo -e "\e[1m\e[92mStart up complete! Now we will just watch and hope we'll find some block :)\e[0m"
+  echo
 
-tail -f ../HTMLCOIN-Logs/htmlcoin-miner-main.log | grep --line-buffered -B 1 '"'
+  tail -f ../HTMLCOIN-Logs/htmlcoin-miner-main.log | grep --line-buffered -B 1 '"'
+else
+  echo -e "\e[1m\e[92mStart up complete! Now we will just watch and hope we'll find some block :) (Telegram notifications are active)\e[0m"
+  echo
+
+  tail -f ../HTMLCOIN-Logs/htmlcoin-miner-main.log | grep --line-buffered -B 1 '"' | while read line; do curl -g -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage?chat_id=$TELEGRAM_CHAT_ID&text=$line" && echo; done
+fi
