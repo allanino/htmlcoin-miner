@@ -12,7 +12,7 @@ start_daemon(){
 }
 
 check_daemon(){
-  echo -ne "Blocks synced: 0"\\r
+  echo -ne "Blocks synced: 0/?"\\r
 
   while true; do
     MONEY="$(/usr/local/bin/htmlcoin-cli getinfo > /dev/null 2>&1)"
@@ -27,14 +27,26 @@ check_daemon(){
   done
 
   while true; do
-    MONEY="$(/usr/local/bin/htmlcoin-cli getinfo | grep moneysupply | awk '{ print $2 }')"
-    MONEY="${MONEY:: -1}"
+    # Get chain height
+    HEIGHT="$(/usr/local/bin/htmlcoin-cli getcheckpoint | grep height | awk '{ print $2 }')"
+    HEIGHT="${HEIGHT:: -1}"
 
+    # We add 6 here just because usually the height returned by getcheckpoint is 6 blocks behind
+    TRUE_HEIGHT_ESTIMATE=$(($HEIGHT + 6))
+
+    # Get number of processed blocks
     BLOCKS="$(/usr/local/bin/htmlcoin-cli getblockcount)"
 
-    echo -ne "Blocks synced: $BLOCKS"\\r
+    if [ $HEIGHT -eq "0" ]
+    then
+      echo -ne "Blocks synced: $BLOCKS/?"\\r
+      sleep 5
+      continue
+    fi
 
-    if [ $MONEY -eq "0" ]
+    echo -ne "Blocks synced: $BLOCKS/$TRUE_HEIGHT_ESTIMATE"\\r
+
+    if [ $BLOCKS -lt $HEIGHT ]
     then
       sleep 5
       continue
@@ -101,4 +113,4 @@ done
 echo -e "\e[1m\e[92mStart up complete! Now we will just watch and hope we'll find some block :)\e[0m"
 echo
 
-tail -f ../HTMLCOIN-Logs/htmlcoin-miner-main.log | grep -B 1 '"'
+tail -f ../HTMLCOIN-Logs/htmlcoin-miner-main.log | grep --line-buffered -B 1 '"'
