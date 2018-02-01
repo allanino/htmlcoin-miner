@@ -33,7 +33,7 @@ WORKDIR /home/htmlcoin
 # Install HTMLCOIN daemon
 RUN ./autogen.sh
 RUN ./configure --without-gui
-RUN make -j8
+RUN make
 RUN make install
 
 # Create data dir
