@@ -101,4 +101,4 @@ done
 echo -e "\e[1m\e[92mStart up complete! Now we will just watch and hope we'll find some block :)\e[0m"
 echo
 
-tail -f ../HTMLCOIN-Logs/htmlcoin-miner-main.log | grep -B 1 '\"'
+tail -f ../HTMLCOIN-Logs/htmlcoin-miner-main.log | grep -B 1 '"'
