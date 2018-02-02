@@ -21,6 +21,7 @@ RUN apt-get install -y \
       bsdmainutils \
       git \
       cmake \
+      curl \
       libboost-all-dev \
       libdb4.8-dev libdb4.8++-dev
 
