@@ -31,6 +31,9 @@ RUN git clone https://github.com/HTMLCOIN/HTMLCOIN.git /home/htmlcoin --recursiv
 # Go to HTMLCOIN repository
 WORKDIR /home/htmlcoin
 
+# Checkout to correct tag
+RUN git checkout tags/v2.0.1.0
+
 # Install HTMLCOIN daemon
 RUN ./autogen.sh
 RUN ./configure --without-gui
