@@ -1,6 +1,6 @@
 # HTMLCOIN Miner
 
-This is just a Dockerfile to build the HTMLCOIN bineries optimized for mining.
+This is just a Dockerfile to build the HTMLCOIN binaries optimized for CPU mining.
 
 Besides the [Dockerfile](Dockerfile) we have just a [start.sh](start.sh) script to run the HTMLCOIN
 daemon and to start the miners.
